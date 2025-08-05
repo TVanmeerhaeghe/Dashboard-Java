@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{fragments/layout :: layout(
+          title='Ajouter un client',
+          content=~{::content}
+        )}"
+>
+  <head>
+    <title>Ajouter un client</title>
+  </head>
+  <body>
+    <div th:fragment="content">
+      <h1 class="mb-4">Ajouter un client</h1>
+
+      <form th:action="@{/ajouter}" th:object="${client}" method="post">
+        <div class="row g-3">
+          <div class="col-md-2">
+            <label>Civilité</label>
+            <input th:field="*{civilite}" class="form-control" required />
+          </div>
+          <div class="col-md-5">
+            <label>Prénom</label>
+            <input th:field="*{prenom}" class="form-control" required />
+          </div>
+          <div class="col-md-5">
+            <label>Nom</label>
+            <input th:field="*{nom}" class="form-control" required />
+          </div>
+          <div class="col-md-6">
+            <label>Email</label>
+            <input
+              type="email"
+              th:field="*{email}"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="col-md-6">
+            <label>Téléphone</label>
+            <input th:field="*{telephone}" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label>Entreprise</label>
+            <input th:field="*{entreprise}" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label>Adresse</label>
+            <input th:field="*{adresse}" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label>Code postal</label>
+            <input th:field="*{codePostal}" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label>Ville</label>
+            <input th:field="*{ville}" class="form-control" />
+          </div>
+          <div class="col-md-4">
+            <label>Pays</label>
+            <input th:field="*{pays}" class="form-control" value="France" />
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button class="btn btn-success">Enregistrer</button>
+          <a href="/" class="btn btn-secondary">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
