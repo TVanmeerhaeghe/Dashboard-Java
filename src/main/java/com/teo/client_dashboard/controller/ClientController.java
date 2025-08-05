@@ -2,8 +2,10 @@ package com.teo.client_dashboard.controller;
 
 import com.teo.client_dashboard.model.Client;
 import com.teo.client_dashboard.repository.ClientRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +25,6 @@ public class ClientController {
     @GetMapping("/")
     public String afficherClients(Model model) {
         List<Client> clients = clientRepository.findAll();
-        System.out.println("DEBUG: trouvé " + clients.size() + " clients");
-        clients.forEach(c -> System.out.println(" → " + c.getPrenom() + " " + c.getNom()));
         model.addAttribute("clients", clients);
         return "index";
     }
@@ -36,9 +36,16 @@ public class ClientController {
     }
 
     @PostMapping("/ajouter")
-    public String enregistrerClient(@ModelAttribute Client client) {
+    public String enregistrerClient(
+            @Valid @ModelAttribute("client") Client client,
+            BindingResult result,
+            Model model
+    ) {
+        if (result.hasErrors()) {
+            return "form";
+        }
         client.setDateCreation(LocalDateTime.now());
         clientRepository.save(client);
-        return "redirect:/"; 
-    }   
+        return "redirect:/";
+    }
 }

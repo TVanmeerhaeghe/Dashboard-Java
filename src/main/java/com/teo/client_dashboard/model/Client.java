@@ -1,6 +1,7 @@
 package com.teo.client_dashboard.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,27 +12,42 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La civilité est requise")
+    @Pattern(regexp = "^(M\\.|Mme|Mlle)$", message = "Civilité invalide (M., Mme ou Mlle)")
     private String civilite;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Le prénom est requis")
+    @Size(max = 50, message = "Le prénom ne peut pas dépasser 50 caractères")
     private String prenom;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Le nom est requis")
+    @Size(max = 50, message = "Le nom ne peut pas dépasser 50 caractères")
     private String nom;
 
+    @Size(max = 100, message = "Le nom de l'entreprise ne peut pas dépasser 100 caractères")
     private String entreprise;
 
+    @NotBlank(message = "L'email est requis")
+    @Email(message = "L'email doit être une adresse valide")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Pattern(regexp = "^\\d{10}$", message = "Le numéro de téléphone doit comporter exactement 10 chiffres")
     private String telephone;
+
+    @Size(max = 200, message = "L'adresse ne peut pas dépasser 200 caractères")
     private String adresse;
+
+    @Pattern(regexp = "^\\d{5}$", message = "Le code postal doit comporter 5 chiffres")
     private String codePostal;
+
+    @Size(max = 100, message = "La ville ne peut pas dépasser 100 caractères")
     private String ville;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Le pays est requis")
     private String pays = "France";
 
+    @NotNull
     private LocalDateTime dateCreation;
 
     public Client() {
@@ -131,4 +147,3 @@ public class Client {
         this.dateCreation = dateCreation;
     }
 }
-

@@ -6,9 +6,6 @@
           content=~{::content}
         )}"
 >
-  <head>
-    <title>Ajouter un client</title>
-  </head>
   <body>
     <div th:fragment="content">
       <h1 class="mb-4">Ajouter un client</h1>
@@ -17,48 +14,110 @@
         <div class="row g-3">
           <div class="col-md-2">
             <label>Civilité</label>
-            <input th:field="*{civilite}" class="form-control" required />
+            <select th:field="*{civilite}" class="form-select">
+              <option value="">-- Choisir --</option>
+              <option value="M.">M.</option>
+              <option value="Mme">Mme</option>
+              <option value="Mlle">Mlle</option>
+            </select>
+            <div
+              th:if="${#fields.hasErrors('civilite')}"
+              th:errors="*{civilite}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-5">
             <label>Prénom</label>
-            <input th:field="*{prenom}" class="form-control" required />
+            <input th:field="*{prenom}" class="form-control" />
+            <div
+              th:if="${#fields.hasErrors('prenom')}"
+              th:errors="*{prenom}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-5">
             <label>Nom</label>
-            <input th:field="*{nom}" class="form-control" required />
+            <input th:field="*{nom}" class="form-control" />
+            <div
+              th:if="${#fields.hasErrors('nom')}"
+              th:errors="*{nom}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-6">
             <label>Email</label>
-            <input
-              type="email"
-              th:field="*{email}"
-              class="form-control"
-              required
-            />
+            <input type="email" th:field="*{email}" class="form-control" />
+            <div
+              th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-6">
             <label>Téléphone</label>
-            <input th:field="*{telephone}" class="form-control" />
+            <input
+              th:field="*{telephone}"
+              class="form-control"
+              placeholder="0612345678"
+            />
+            <div
+              th:if="${#fields.hasErrors('telephone')}"
+              th:errors="*{telephone}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-6">
             <label>Entreprise</label>
             <input th:field="*{entreprise}" class="form-control" />
+            <div
+              th:if="${#fields.hasErrors('entreprise')}"
+              th:errors="*{entreprise}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-6">
             <label>Adresse</label>
             <input th:field="*{adresse}" class="form-control" />
+            <div
+              th:if="${#fields.hasErrors('adresse')}"
+              th:errors="*{adresse}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-4">
             <label>Code postal</label>
-            <input th:field="*{codePostal}" class="form-control" />
+            <input
+              th:field="*{codePostal}"
+              class="form-control"
+              placeholder="75001"
+            />
+            <div
+              th:if="${#fields.hasErrors('codePostal')}"
+              th:errors="*{codePostal}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-4">
             <label>Ville</label>
             <input th:field="*{ville}" class="form-control" />
+            <div
+              th:if="${#fields.hasErrors('ville')}"
+              th:errors="*{ville}"
+              class="text-danger"
+            ></div>
           </div>
+
           <div class="col-md-4">
             <label>Pays</label>
-            <input th:field="*{pays}" class="form-control" value="France" />
+            <input th:field="*{pays}" class="form-control" readonly />
           </div>
         </div>
 
