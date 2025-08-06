@@ -82,4 +82,20 @@ public class ClientController {
         ra.addFlashAttribute("success", "Client mis à jour avec succès !");
         return "redirect:/";
     }
+
+    @PostMapping("/supprimer/{id}")
+    public String supprimerClient(
+            @PathVariable Long id,
+            RedirectAttributes ra
+    ) {
+        Client client = clientRepository.findById(id)
+            .orElse(null);
+        if (client != null) {
+            clientRepository.delete(client);
+            ra.addFlashAttribute("success", "Client supprimé avec succès !");
+        } else {
+            ra.addFlashAttribute("danger", "Client introuvable (id=" + id + ")");
+        }
+        return "redirect:/";
+    }
 }

@@ -54,6 +54,17 @@
               >
                 ✏️ Modifier
               </a>
+
+              <form
+                th:action="@{/supprimer/{id}(id=${client.id})}"
+                method="post"
+                style="display: inline"
+                onsubmit="return confirm('Confirmer la suppression de ce client ?');"
+              >
+                <button type="submit" class="btn btn-sm btn-danger">
+                  🗑️ Supprimer
+                </button>
+              </form>
             </td>
           </tr>
         </tbody>
