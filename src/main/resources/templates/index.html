@@ -26,6 +26,7 @@
             <th>Ville</th>
             <th>Pays</th>
             <th>Date de création</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +46,14 @@
               th:text="${#temporals.format(client.dateCreation, 'dd/MM/yyyy HH:mm')}"
             >
               --
+            </td>
+            <td>
+              <a
+                th:href="@{/modifier/{id}(id=${client.id})}"
+                class="btn btn-sm btn-warning"
+              >
+                ✏️ Modifier
+              </a>
             </td>
           </tr>
         </tbody>

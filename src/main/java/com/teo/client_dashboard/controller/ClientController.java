@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,6 +48,38 @@ public class ClientController {
         }
         client.setDateCreation(LocalDateTime.now());
         clientRepository.save(client);
+        return "redirect:/";
+    }
+
+     @GetMapping("/modifier/{id}")
+    public String afficherFormulaireModifier(
+            @PathVariable Long id,
+            Model model,
+            RedirectAttributes ra
+    ) {
+        Client client = clientRepository.findById(id)
+            .orElse(null);
+        if (client == null) {
+            ra.addFlashAttribute("danger", "Client introuvable (id=" + id + ")");
+            return "redirect:/";
+        }
+        model.addAttribute("client", client);
+        return "form";
+    }
+
+    @PostMapping("/modifier/{id}")
+    public String mettreAJourClient(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("client") Client client,
+            BindingResult result,
+            RedirectAttributes ra
+    ) {
+        if (result.hasErrors()) {
+            return "form";
+        }
+        client.setId(id);
+        clientRepository.save(client);
+        ra.addFlashAttribute("success", "Client mis à jour avec succès !");
         return "redirect:/";
     }
 }
