@@ -3,6 +3,8 @@ package com.teo.client_dashboard.controller;
 import com.teo.client_dashboard.model.Client;
 import com.teo.client_dashboard.repository.ClientRepository;
 import jakarta.validation.Valid;
+
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 public class ClientController {
@@ -28,16 +32,18 @@ public class ClientController {
     @GetMapping("/")
     public String afficherClients(
             @RequestParam(value = "q", required = false) String q,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable,
             Model model
     ) {
-        List<Client> clients;
+        Page<Client> page;
         if (q != null && !q.isBlank()) {
-            clients = clientRepository
-                .findByPrenomContainingIgnoreCaseOrNomContainingIgnoreCaseOrEntrepriseContainingIgnoreCase(q, q, q);
+            page = clientRepository
+            .findByPrenomContainingIgnoreCaseOrNomContainingIgnoreCaseOrEntrepriseContainingIgnoreCase(
+                q, q, q, pageable);
         } else {
-            clients = clientRepository.findAll();
+            page = clientRepository.findAll(pageable);
         }
-        model.addAttribute("clients", clients);
+        model.addAttribute("page", page);
         model.addAttribute("q", q);
         return "index";
     }

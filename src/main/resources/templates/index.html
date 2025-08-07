@@ -2,17 +2,22 @@
 <html
   xmlns:th="http://www.thymeleaf.org"
   th:replace="~{fragments/layout :: layout(
-          title='Liste des clients',
-          content=~{::content}
-        )}"
+                     title='Liste des clients',
+                     content=~{::content}
+                   )}"
+  lang="fr"
 >
   <body>
     <div th:fragment="content">
       <h1 class="mb-4">Liste des clients</h1>
-      <a href="/ajouter" class="btn btn-primary mb-3">Ajouter un client</a>
+      <a href="/ajouter" class="btn btn-primary mb-3">➕ Ajouter un client</a>
 
-      <form th:action="@{/}" method="get" class="mb-3">
-        <div class="input-group">
+      <form
+        th:action="@{/}"
+        method="get"
+        class="row g-3 align-items-center mb-3"
+      >
+        <div class="col-auto">
           <input
             type="text"
             name="q"
@@ -20,6 +25,24 @@
             placeholder="Recherche (prénom, nom, entreprise)..."
             th:value="${q}"
           />
+        </div>
+        <div class="col-auto">
+          <select name="size" class="form-select" onchange="this.form.submit()">
+            <option th:value="10" th:selected="${page.size==10}">
+              10 par page
+            </option>
+            <option th:value="20" th:selected="${page.size==20}">
+              20 par page
+            </option>
+            <option th:value="50" th:selected="${page.size==50}">
+              50 par page
+            </option>
+            <option th:value="100" th:selected="${page.size==100}">
+              100 par page
+            </option>
+          </select>
+        </div>
+        <div class="col-auto">
           <button class="btn btn-outline-secondary" type="submit">🔍</button>
         </div>
       </form>
@@ -43,7 +66,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr th:each="client : ${clients}">
+          <tr th:if="${page.content.empty}">
+            <td colspan="13" class="text-center">Aucun client trouvé</td>
+          </tr>
+          <tr th:each="client : ${page.content}">
             <td th:text="${client.id}">1</td>
             <td th:text="${client.civilite}">M.</td>
             <td th:text="${client.prenom}">Jean</td>
@@ -64,24 +90,54 @@
               <a
                 th:href="@{/modifier/{id}(id=${client.id})}"
                 class="btn btn-sm btn-warning"
+                >✏️</a
               >
-                ✏️ Modifier
-              </a>
-
               <form
                 th:action="@{/supprimer/{id}(id=${client.id})}"
                 method="post"
                 style="display: inline"
-                onsubmit="return confirm('Confirmer la suppression de ce client ?');"
+                onsubmit="return confirm('Supprimer ce client ?');"
               >
-                <button type="submit" class="btn btn-sm btn-danger">
-                  🗑️ Supprimer
-                </button>
+                <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
               </form>
             </td>
           </tr>
         </tbody>
       </table>
+
+      <nav th:if="${page.totalPages > 1}">
+        <ul class="pagination">
+          <li
+            class="page-item"
+            th:classappend="${!page.hasPrevious()}? 'disabled'"
+          >
+            <a
+              class="page-link"
+              th:href="@{/(q=${q}, page=${page.number-1}, size=${page.size})}"
+              >« Précédent</a
+            >
+          </li>
+          <li
+            th:each="i : ${#numbers.sequence(0, page.totalPages-1)}"
+            class="page-item"
+            th:classappend="${i==page.number} ? 'active'"
+          >
+            <a
+              class="page-link"
+              th:href="@{/(q=${q}, page=${i}, size=${page.size})}"
+              th:text="${i+1}"
+              >1</a
+            >
+          </li>
+          <li class="page-item" th:classappend="${!page.hasNext()}? 'disabled'">
+            <a
+              class="page-link"
+              th:href="@{/(q=${q}, page=${page.number+1}, size=${page.size})}"
+              >Suivant »</a
+            >
+          </li>
+        </ul>
+      </nav>
     </div>
   </body>
 </html>
