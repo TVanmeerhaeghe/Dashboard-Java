@@ -11,6 +11,19 @@
       <h1 class="mb-4">Liste des clients</h1>
       <a href="/ajouter" class="btn btn-primary mb-3">Ajouter un client</a>
 
+      <form th:action="@{/}" method="get" class="mb-3">
+        <div class="input-group">
+          <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Recherche (prénom, nom, entreprise)..."
+            th:value="${q}"
+          />
+          <button class="btn btn-outline-secondary" type="submit">🔍</button>
+        </div>
+      </form>
+
       <table class="table table-striped table-bordered">
         <thead class="table-dark">
           <tr>

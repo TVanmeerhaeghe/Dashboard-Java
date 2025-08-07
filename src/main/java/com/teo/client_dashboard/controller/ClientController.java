@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -25,9 +26,19 @@ public class ClientController {
     }
 
     @GetMapping("/")
-    public String afficherClients(Model model) {
-        List<Client> clients = clientRepository.findAll();
+    public String afficherClients(
+            @RequestParam(value = "q", required = false) String q,
+            Model model
+    ) {
+        List<Client> clients;
+        if (q != null && !q.isBlank()) {
+            clients = clientRepository
+                .findByPrenomContainingIgnoreCaseOrNomContainingIgnoreCaseOrEntrepriseContainingIgnoreCase(q, q, q);
+        } else {
+            clients = clientRepository.findAll();
+        }
         model.addAttribute("clients", clients);
+        model.addAttribute("q", q);
         return "index";
     }
 
